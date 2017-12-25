@@ -18,6 +18,7 @@ So please dont ask why it's not working, get your memory reader first!
 * Display item
 * Display Vehicle
 * Track current player location (change that with `/?id=PLAYERINDEX`)
+* Select map (change with `/?map=(1|2)` or pick one at random if omitted)
 
 ## Build instructions
 
@@ -106,6 +107,9 @@ HTTP POST that JSON struct blow, send it to `http://127.0.0.1:7890'.
 
 ## Changelog
 
+### 2017-12-21 16:10:08
+* Add desert map supported, made by [@ivq](https://github.com/ivq)
+
 ### 2017-12-16 01:37:18
 * facing direction arrow is no longer displayed when player is driving or parachuting.
 * try to add a meter but failed, some junk code here.
@@ -122,10 +126,10 @@ HTTP POST that JSON struct blow, send it to `http://127.0.0.1:7890'.
 ```C++
 if (std::find(playerIDs.begin(), playerIDs.end(), curActorID) != playerIDs.end())
 {
-    int64_t rootCmpPtr = _Reader->readType<int64_t>(curActor + 0x180);
-    int64_t playerState = _Reader->readType<int64_t>(curActor + 0x3C0);
-    Vector3 actorLocation = _Reader->readVec(rootCmpPtr + 0x1A0);
-    Vector3 relativeRotation = _Reader->readVec(rootCmpPtr + 0x01EC); // <---- here
+    int64_t rootCmpPtr = _Reader->readType<int64_t>(curActor + 0x188);
+    int64_t playerState = _Reader->readType<int64_t>(curActor + 0x3D0);
+    Vector3 actorLocation = _Reader->readVec(rootCmpPtr + 0x2DC);
+    Vector3 relativeRotation = _Reader->readVec(rootCmpPtr + 0x02DC); // <---- here
 
     // ...
     
@@ -147,7 +151,7 @@ if (std::find(playerIDs.begin(), playerIDs.end(), curActorID) != playerIDs.end()
 {
     // ...
 
-    float hp = _Reader->readType<float>(curActor + 0x107C); // <---- here
+    float hp = _Reader->readType<float>(curActor + 0x113C); // <---- here
 
     w_data["players"].emplace_back(json::object({ { "t", actorTeam }, {"hp", hp}, { "x", actorLocation.X },{ "y", actorLocation.Y }/*,{ "z", actorLocation.Z }*/ })); // <---- and here
 }
